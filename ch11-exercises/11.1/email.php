@@ -41,6 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <form action="email.php" method="post">
 	<p>Name: <input type="text" name="name" size="30" maxlength="60" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>" /></p>
 	<p>Email Address: <input type="text" name="email" size="30" maxlength="80" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>" /></p>
+	<p>Add1: <input type="text" name="add1" size="30" maxlength="80" value="" /></p>
+	<p>Add2: <input type="text" name="add2" size="30" maxlength="80" value="" /></p>
+	<p>Add3: <input type="text" name="add3" size="30" maxlength="80" value="" /></p>
 	<p>Comments: <textarea name="comments" rows="5" cols="30"><?php if (isset($_POST['comments'])) echo $_POST['comments']; ?></textarea></p>
 	<p><input type="submit" name="submit" value="Send!" /></p>
 </form>
