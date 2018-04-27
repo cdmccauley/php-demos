@@ -1,0 +1,47 @@
+CREATE DATABASE gitgudgames
+CHARACTER SET utf8
+COLLATE utf8_general_ci;
+USE gitgudgames;
+
+CREATE TABLE game_studios (
+studio_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+studio_name VARCHAR(40) NOT NULL,
+PRIMARY KEY (studio_id)
+) ENGINE=MyISAM;
+
+CREATE TABLE games (
+game_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+studio_id INT UNSIGNED NOT NULL,
+game_name VARCHAR(60) NOT NULL,
+game_price DECIMAL(5,2) UNSIGNED NOT NULL,
+game_desc VARCHAR(255) DEFAULT NULL,
+game_cover VARCHAR(60) NOT NULL,
+PRIMARY KEY (game_id),
+FOREIGN KEY (studio_id) REFERENCES game_studios (studio_id)
+ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=MyISAM;
+
+CREATE TABLE customers (
+customer_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+email VARCHAR(60) NOT NULL,
+pass CHAR(40) NOT NULL,
+PRIMARY KEY (customer_id),
+UNIQUE (email)
+) ENGINE=MyISAM;
+
+CREATE TABLE customer_games (
+    customer_id INT UNSIGNED NOT NULL,
+    game_id INT UNSIGNED NOT NULL,
+)
+
+CREATE TABLE orders (
+order_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+customer_id INT UNSIGNED NOT NULL,
+order_total DECIMAL(6,2) UNSIGNED NOT NULL,
+order_date TIMESTAMP,
+PRIMARY KEY (order_id),
+FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
+ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=MyISAM;
+
+CREATE TABLE 

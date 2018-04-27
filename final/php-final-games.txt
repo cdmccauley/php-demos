@@ -1,0 +1,33 @@
+game_studio
+  studio_id
+  studio_name
+
+game
+  game_id
+  studio_id
+  game_name
+  game_price
+  game_desc
+  game_cover
+
+order_detail
+  order_detail_id
+  order_id
+  game_id
+
+order
+  order_id
+  customer_id
+  order_total
+  order_date
+
+customer_game
+  customer_id
+  game_id
+
+customer
+  customer_id
+  email
+  password
+
+when customer orders successfully the download button on the game page is unlocked
