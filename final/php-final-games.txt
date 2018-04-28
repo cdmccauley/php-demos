@@ -1,33 +1,52 @@
-game_studio
-  studio_id
+game_studios
+  studio_id		pk
   studio_name
 
-game
-  game_id
-  studio_id
+games
+  game_id		pk
+  studio_id		fk
   game_name
   game_price
   game_desc
   game_cover
 
-order_detail
-  order_detail_id
-  order_id
-  game_id
+order_details
+  order_detail_id	pk
+  order_id		fk
+  game_id		fk
 
-order
-  order_id
-  customer_id
+orders
+  order_id		pk
+  customer_id		fk
   order_total
   order_date
 
-customer_game
-  customer_id
-  game_id
+customer_games
+  customer_id		pk/fk
+  game_id		pk/fk
 
-customer
-  customer_id
+customers
+  customer_id		pk
   email
   password
 
+notes:
 when customer orders successfully the download button on the game page is unlocked
+customers.customer_id is incrementing on unsuccessful registration
+register page shows password in source on failed registration (because sticky)
+bold password format requirements on the register page
+
+register
+http://localhost/php-scripts/ch16-exercises/16.2/
+http://localhost/php-scripts/ch09-exercises/9.5/
+
+login
+http://localhost/php-scripts/ch15-exercises/15.8-15.10/
+http://localhost/php-scripts/ch12-pursue/htdocs/
+http://localhost/php-scripts/ch12-exercises/12.12-12.13/
+
+^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&'])[^ ]{8,}$
+
+[A-Za-z0-9!@#$%^&]{8,}
+
+preg_match("/[A-Za-z0-9!@#$%^&]{8,}/", $input_line, $output_array);

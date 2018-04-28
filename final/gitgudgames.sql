@@ -7,7 +7,7 @@ CREATE TABLE game_studios (
 studio_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 studio_name VARCHAR(40) NOT NULL,
 PRIMARY KEY (studio_id)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE games (
 game_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -19,7 +19,7 @@ game_cover VARCHAR(60) NOT NULL,
 PRIMARY KEY (game_id),
 FOREIGN KEY (studio_id) REFERENCES game_studios (studio_id)
 ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE customers (
 customer_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -27,12 +27,17 @@ email VARCHAR(60) NOT NULL,
 pass CHAR(40) NOT NULL,
 PRIMARY KEY (customer_id),
 UNIQUE (email)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 CREATE TABLE customer_games (
-    customer_id INT UNSIGNED NOT NULL,
-    game_id INT UNSIGNED NOT NULL,
-)
+customer_id INT UNSIGNED NOT NULL,
+game_id INT UNSIGNED NOT NULL,
+PRIMARY KEY (customer_id, game_id),
+FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
+ON DELETE NO ACTION ON UPDATE NO ACTION,
+FOREIGN KEY (game_id) REFERENCES games (game_id)
+ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB;
 
 CREATE TABLE orders (
 order_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -42,6 +47,15 @@ order_date TIMESTAMP,
 PRIMARY KEY (order_id),
 FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
 ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
-CREATE TABLE 
+CREATE TABLE order_details (
+order_detail_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+order_id INT UNSIGNED NOT NULL,
+game_id INT UNSIGNED NOT NULL,
+PRIMARY KEY (order_detail_id, order_id, game_id),
+FOREIGN KEY (order_id) REFERENCES orders (order_id)
+ON DELETE NO ACTION ON UPDATE NO ACTION,
+FOREIGN KEY (game_id) REFERENCES games (game_id)
+ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB;
