@@ -1,5 +1,9 @@
 <?php # register.php
 
+// start session
+session_name('GitGudGamesAuth');
+session_start();
+
 $page_title = 'Git Gud Games - Register';
 include ('includes/header.html');
 
