@@ -1,4 +1,5 @@
 <?php
+
 function check_login($dbc, $email = '', $pass = '') {
 
 	$errors = array(); // Initialize error array.
@@ -26,8 +27,9 @@ function check_login($dbc, $email = '', $pass = '') {
 		// Check the result:
 		if (mysqli_num_rows($r) == 1) {
 
-			// Fetch the record:
-			$row = mysqli_fetch_array ($r, MYSQLI_ASSOC);
+			// store session information
+			$_SESSION = mysqli_fetch_array($r, MYSQLI_ASSOC);
+            $_SESSION['agent'] = md5($_SERVER['HTTP_USER_AGENT']);
 	
 			// Return true and the record:
 			return true; // !!! not using the variable $row !!!
@@ -40,22 +42,4 @@ function check_login($dbc, $email = '', $pass = '') {
 	
 	// Return false and the errors:
 	return false;
-}
-
-function redirect_user ($page = 'index.php') {
-
-	// Start defining the URL...
-	// URL is http:// plus the host name plus the current directory:
-	$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
-	
-	// Remove any trailing slashes:
-	$url = rtrim($url, '/\\');
-	
-	// Add the page:
-	$url .= '/' . $page;
-	
-	// Redirect the user:
-	header("Location: $url");
-	exit(); // Quit the script.
-
 }

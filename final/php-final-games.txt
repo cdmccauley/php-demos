@@ -35,6 +35,9 @@ when customer orders successfully the download button on the game page is unlock
 customers.customer_id is incrementing on unsuccessful registration
 register page shows password in source on failed registration (because sticky)
 bold password format requirements on the register page
+validation!!!
+try changing session ids across pages
+set session expiration across pages
 
 register
 http://localhost/php-scripts/ch16-exercises/16.2/
@@ -87,3 +90,12 @@ else no previous triggers
 
 
 SELECT customers.email FROM customers WHERE customers.email="" AND customers.pass=SHA1('');
+
+ elseif (isset($_SESSION['agent']) && md5($_SERVER['HTTP_USER_AGENT']) != $_SESSION['agent']) {
+	// attempt to access page with invalid session information
+	// log user out
+	// destroy session
+	redirect_user(); // to login.php
+}
+
+($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT']))

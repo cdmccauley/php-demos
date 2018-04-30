@@ -1,15 +1,18 @@
-<?php
+<?php # mygames.php
 
+// start session
 session_name('GitGudGamesAuth');
 session_start();
 
-if (!(isset($_SESSION['agent'])) OR ($_SESSION['agent'] != md5($_SERVER['HTTP_USER_AGENT']))) {
-    require('../login_functions.php');
-    redirect_user();
-}
+// check session
+require('../check_session.php');
+check_session();
 
 $page_title = 'Git Gud Games - My Games';
 include ('includes/header.html');
+
+echo $_SESSION['email'];
+
 include ('includes/footer.html');
 
 ?>

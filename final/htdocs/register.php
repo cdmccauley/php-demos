@@ -4,15 +4,20 @@
 session_name('GitGudGamesAuth');
 session_start();
 
+// check logged in
+require('../check_logged_in.php');
+check_logged_in();
+
 $page_title = 'Git Gud Games - Register';
 include ('includes/header.html');
 
-// Check for form submission:
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') { // register was submitted
 
-	require ('../mysqli_connect.php'); // Connect to the db.
-		
-	$errors = array(); // Initialize an error array.
+	// helper file
+	require('../mysqli_connect.php');
+	
+	// declarations
+	$errors = array();
 	
 	// Check for an email address:
 	if (empty($_POST['email'])) {

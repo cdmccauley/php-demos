@@ -4,20 +4,26 @@
 session_name('GitGudGamesAuth');
 session_start();
 
+// check logged in
+require('../check_logged_in.php');
+check_logged_in();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') { // login was submitted
 
-    // helper files
-    require('../login_functions.php');
+    // function files
     require('../mysqli_connect.php');
+    require('../login_functions.php');
+
+    // declarations
+    $errors = array();
+
+    // validation
 
     if (true) { // variables are set and valid
         if (check_login($mysqli, $_POST['email'], $_POST['pass'])) {
-            // valid login
-            
-            // store session information
-            $_SESSION['agent'] = md5($_SERVER['HTTP_USER_AGENT']);
 
-            // ??? redirect then exit script ???
+            // valid login, go to mygames
+            require('../redirect_user.php');
             redirect_user('mygames.php');
 
         } else {
