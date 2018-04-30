@@ -13,97 +13,88 @@ include ('includes/header.html');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') { // register was submitted
 
-	// helper file
-	require('../mysqli_connect.php');
-	
 	// declarations
-	$errors = array();
+	$error;
+	$valid_email;
+	$valid_pass;
 	
-	// Check for an email address:
-	if (empty($_POST['email'])) {
-		$errors[] = 'You forgot to enter your e-mail address.';
-	} elseif (!(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))) {
-		$errors[] = "Invalid e-mail address";
-	} else {
-		$e = $mysqli->real_escape_string(trim($_POST['email']));
+	// validate email
+	if (!isset($_POST['email']) || empty($_POST['email'])) {
+        $error = 'Please provide an e-mail address.';
+    } elseif (strlen($_POST['email']) > 60) {
+        $error = 'Please provide an e-mail address less than 60 characters long.';
+    } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        $error = 'Provided e-mail address format not recognized.';
+    } else {
+		$valid_email = $_POST['email'];
 	}
 
-	if (empty($errors)) { // check for existing email
-		$q = "SELECT customers.email FROM customers WHERE email='$e'";
-		$mysqli->query($q);
-		if ($mysqli->affected_rows > 0) { // email exists in database
-			$errors[] = 'The provided email is already registered.';
-		}
-	}
-	
-	// Check for a password and match against the confirmed password:
-	if (!empty($_POST['pass1'])) {
-		if ($_POST['pass1'] != $_POST['pass2']) {
-			$errors[] = 'Your password did not match the confirmed password.';
-		} elseif (!(preg_match('/[A-Za-z0-9!@#$%^&]{8,}/', $_POST['pass1']))) {
-			$errors[] = 'Password must be at least 8 characters and can only contain A-Z, a-z, 0-9, and !@#$%^&';
+	if (empty($error) && !empty($valid_email)) {
+		// email validated, check against existing emails
+		require('../mysqli_connect.php');
+		require('../check_registered_email.php');
+
+		if (!check_registered_email($mysqli, $valid_email)) {
+			// provided email does not exist in database, validate pass
+			if ((!isset($_POST['pass1']) || empty($_POST['pass1'])) || (!isset($_POST['pass2']) || empty($_POST['pass2']))) {
+				$error = 'Please provide values for both password fields.';
+			} elseif ((strlen($_POST['pass1']) < 8 || strlen($_POST['pass1']) > 20) || (strlen($_POST['pass2']) < 8 || strlen($_POST['pass2']) > 20)) {
+				$error = 'Password must be at least 8 characters and no more than 20 characters.';
+			} elseif ($_POST['pass1'] != $_POST['pass2']) {
+				$error = 'Provided passwords do not match!';
+			} elseif (!preg_match('/[A-Za-z0-9!@#$%^&]{8,20}/', $_POST['pass1'])) {
+				$error = 'Password can only contain A-Z, a-z, 0-9, or !@#$%^& .';
+			} else {
+				$valid_pass = $_POST['pass1']; // TEST WITH WHITESPACE
+			}
 		} else {
-			$p = $mysqli->real_escape_string(trim($_POST['pass1']));
+			$error = 'Provided e-mail is already registered.';
 		}
-	} else {
-		$errors[] = 'You forgot to enter your password.';
+		if (!empty($error)) {
+			// error present, dispose of db connection
+			$mysqli->close();
+			unset($mysqli);
+		}
 	}
 	
-	if (empty($errors)) { // If everything's OK.
+	if (empty($error) && !empty($valid_email) && !empty($valid_pass)) {
 	
-		// Register the user in the database...
-		
-		// Make the query:
-		$q = "INSERT INTO customers (email, pass) VALUES ('$e', SHA1('$p'))";
-		
-		// Execute the query:
-		$mysqli->query($q);
-			
-		if ($mysqli->affected_rows == 1) { // If it ran OK.
-		
-			// Print a message:
-			echo '<h1>Thank you!</h1>
-		<p>You are now registered.</p>';
-		
-		} else { // If it did not run OK.
-			
-			// Public message:
-			echo '<h1>System Error</h1>
-			<p class="error">You could not be registered due to a system error. We apologize for any inconvenience.</p>'; 
-			
-			// Debugging message:
-			echo '<p>' . $mysqli->error . '<br /><br />Query: ' . $q . '</p>';
-						
-		} // End of if ($r) IF.
-		
-		$mysqli->close(); // Close the database connection.
-		unset($mysqli);
+		// attempt user registration
+		require('../attempt_registration.php');
+		if (attempt_registration($mysqli, $valid_email, $valid_pass)) {
+			// indicate registration success
+			echo '<h1>Thank you!</h1>';
+			echo '<p>You are now registered.</p>';
+			echo '<a href="login.php">Go to the login page.</a>';
 
-		// Include the footer and quit the script:
-		include ('includes/footer.html'); 
-		exit();
-		
-	} else { // Report the errors.
-	
-		echo '<h1>Error!</h1>
-		<p class="error">The following error(s) occurred:<br />';
-		foreach ($errors as $msg) { // Print each error.
-			echo " - $msg<br />\n";
+			// registration success, dispose of db connection
+			$mysqli->close();
+			unset($mysqli);
+
+			// stop script
+			exit();
+		} else {
+			// indicate registration failure
+			$error = 'Unexpected system error, we apologize for any inconvenience.';
+
+			// registration failure, dispose of db connection
+			$mysqli->close();
+			unset($mysqli);
 		}
-		echo '</p><p>Please try again.</p><p><br /></p>';
-		
-	} // End of if (empty($errors)) IF.
-	
-	$mysqli->close(); // Close the database connection.
-	unset($mysqli);
-
-} // End of the main Submit conditional.
+	} else {
+		// error present, display error
+		echo '<h1>Error!</h1>
+		<p class="error">The following error occurred:<br />';
+		echo " - $error</p>";
+		echo '<p>Please try again.</p>';
+	}
+}
 ?>
 <h1>Register</h1>
 <form action="register.php" method="post">
-	<p>Email Address: <input type="email" name="email" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>"  /> </p>
-	<p>Password: <input type="password" name="pass1" pattern="[A-Za-z0-9!@#$%^&]{8,}" value="<?php if (isset($_POST['pass1'])) echo $_POST['pass1']; ?>"  /> Must be at least 8 characters and can only contain A-Z, a-z, 0-9, and !@#$%^& .</p>
-	<p>Confirm Password: <input type="password" name="pass2" pattern="[A-Za-z0-9!@#$%^&]{8,}" value="<?php if (isset($_POST['pass2'])) echo $_POST['pass2']; ?>"  /></p>
+	<p>Email Address: <input type="email" name="email" value="<?php if (isset($_POST['email'])) echo $_POST['email'];?>" /> </p>
+	<p>Password: <input type="password" name="pass1" pattern="[A-Za-z0-9!@#$%^&]{8,20}" /> Password must be 8-20 characters and can only contain A-Z, a-z, 0-9, and !@#$%^& .</p>
+	<p>Confirm Password: <input type="password" name="pass2" pattern="[A-Za-z0-9!@#$%^&]{8,20}" /></p>
 	<p><input type="submit" name="submit" value="Register" /></p>
 </form>
 <?php include ('includes/footer.html'); ?>

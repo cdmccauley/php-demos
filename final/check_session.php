@@ -8,7 +8,7 @@ function check_session() {
         // insert explicit logout
 
         // redirect to index.php
-        require('../redirect_user.php');
+        require('redirect_user.php');
         redirect_user();
     }
 }

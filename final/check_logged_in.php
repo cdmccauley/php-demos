@@ -6,7 +6,7 @@ function check_logged_in() {
     if (isset($_SESSION['agent']) || isset($_SESSION['email'])) {
 
         // logged in, redirect to mygames.php
-        require('../redirect_user.php');
+        require('redirect_user.php');
         redirect_user('mygames.php');
 
     }

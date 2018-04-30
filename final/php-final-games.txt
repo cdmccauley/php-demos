@@ -59,7 +59,7 @@ load login page
   on submit
     if incomplete, reload form
     else send to db
-      if no match, reload form
+
       else start session, store authorization cookie
 
 start session
