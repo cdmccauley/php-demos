@@ -36,8 +36,8 @@ customers.customer_id is incrementing on unsuccessful registration
 register page shows password in source on failed registration (because sticky)
 bold password format requirements on the register page
 validation!!!
-try changing session ids across pages
-set session expiration across pages
+try changing session ids across pages - not really necessary
+set session expiration across pages - already default to drop on browser exit
 
 register
 http://localhost/php-scripts/ch16-exercises/16.2/

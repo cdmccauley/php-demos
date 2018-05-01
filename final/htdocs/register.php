@@ -9,14 +9,19 @@ require('../check_logged_in.php');
 check_logged_in();
 
 $page_title = 'Git Gud Games - Register';
-include ('includes/header.html');
+include('includes/header.html');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') { // register was submitted
+if ($_SERVER['REQUEST_METHOD'] == 'POST') { // registration was submitted
 
 	// declarations
 	$error;
 	$valid_email;
 	$valid_pass;
+
+	// trim whitespace
+	$_POST['email'] = trim($_POST['email']);
+	$_POST['pass1'] = trim($_POST['pass1']);
+	$_POST['pass2'] = trim($_POST['pass2']);
 	
 	// validate email
 	if (!isset($_POST['email']) || empty($_POST['email'])) {
@@ -27,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // register was submitted
         $error = 'Provided e-mail address format not recognized.';
     } else {
 		$valid_email = $_POST['email'];
+		$_POST['email'] = '';
 	}
 
 	if (empty($error) && !empty($valid_email)) {
@@ -45,11 +51,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // register was submitted
 			} elseif (!preg_match('/[A-Za-z0-9!@#$%^&]{8,20}/', $_POST['pass1'])) {
 				$error = 'Password can only contain A-Z, a-z, 0-9, or !@#$%^& .';
 			} else {
-				$valid_pass = $_POST['pass1']; // TEST WITH WHITESPACE
+				$valid_pass = $_POST['pass1'];
+				$_POST['pass1'] = '';
+				$_POST['pass2'] = '';
 			}
 		} else {
 			$error = 'Provided e-mail is already registered.';
 		}
+
 		if (!empty($error)) {
 			// error present, dispose of db connection
 			$mysqli->close();
@@ -61,7 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // register was submitted
 	
 		// attempt user registration
 		require('../attempt_registration.php');
+		
 		if (attempt_registration($mysqli, $valid_email, $valid_pass)) {
+
 			// indicate registration success
 			echo '<h1>Thank you!</h1>';
 			echo '<p>You are now registered.</p>';

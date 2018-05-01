@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // login was submitted
     } elseif (strlen($_POST['email']) > 60) {
         $error = 'Provided e-mail address too long to have been registered.';
     } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        $error = 'Provided e-mail address is invalid.';
+        $error = 'Provided e-mail address format not recognized.';
     } elseif (strlen($_POST['pass']) < 8 || strlen($_POST['pass']) > 20) {
         $error = 'Provided password length is invalid. Passwords must be between 8 and 20 characters.';
     } elseif (!preg_match('/[A-Za-z0-9!@#$%^&]{8,20}/', $_POST['pass'])) {
