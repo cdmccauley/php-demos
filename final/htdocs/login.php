@@ -40,12 +40,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // login was submitted
         // attempt login with provided credentials
         if (check_login($mysqli, $_POST['email'], $_POST['pass'])) {
 
-            // successful login, go to mygames
+            // dispose of db connection
+			$mysqli->close();
+            unset($mysqli);
+            
+            // successful login, provide new session id
+            session_regenerate_id();
+
+            // redirect user to mygames
             require('../redirect_user.php');
             redirect_user('mygames.php');
 
         } else {
-            // failed login
+
+            // failed login, dispose of db connection
+			$mysqli->close();
+            unset($mysqli);
+            
             $error = 'Provided e-mail and password combination were not valid.';
         }
     }
@@ -55,18 +66,41 @@ $page_title = 'Git Gud Games - Login';
 include ('includes/header.html');
 
 if (isset($error) && !empty($error)) {
-	echo '<h1>Error!</h1>
-	<p class="error">The following error occurred:<br />';
-	echo " - $error<br /></p>";
-	echo '<p>Please try again.</p>';
+    // error present, display error
+    echo '<div class="row">
+    <div class="col-sm-offset-3 col-sm-6">
+        <h1>Error!</h1>
+        <p>The following error occurred:</p>';
+    echo "<p> - $error</p><br>";
+    echo '<p>Please try again.</p>
+        </div>
+    </div>';
 }
 
 ?>
-<h1>Login</h1>
-<form action="login.php" method="post">
-	<p>Email Address: <input type="text" name="email" /> </p>
-	<p>Password: <input type="password" name="pass" /></p>
-	<p><input type="submit" name="submit" value="Login" /></p>
+<div class="row">
+    <div class="col-sm-offset-3 col-sm-6">
+        <h1>Login</h1><br>
+    </div>
+</div>
+<form class="form-horizontal" action="login.php" method="post">
+    <div class="form-group">
+        <label class="control-label col-sm-3" for="email">E-Mail:</label>
+        <div class="col-sm-6">
+            <input type="email" class="form-control" placeholder="Enter your e-mail address" name="email" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-3" for="email">Password:</label>
+        <div class="col-sm-6">
+            <input type="password" class="form-control" placeholder="Enter your password" name="pass" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-6">
+            <button type="submit" name="submit" class="btn btn-default">Submit</button>
+        </div>
+    </div>
 </form>
 
 <?php include ('includes/footer.html'); ?>

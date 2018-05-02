@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // registration was submitted
 	
 		// attempt user registration
 		require('../attempt_registration.php');
-		
+
 		if (attempt_registration($mysqli, $valid_email, $valid_pass)) {
 
 			// indicate registration success
@@ -94,18 +94,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // registration was submitted
 		}
 	} else {
 		// error present, display error
-		echo '<h1>Error!</h1>
-		<p class="error">The following error occurred:<br />';
-		echo " - $error</p>";
-		echo '<p>Please try again.</p>';
+		echo '<div class="row">
+				<div class="col-sm-offset-3 col-sm-6">
+					<h1>Error!</h1>
+					<p>The following error occurred:</p>';
+		echo "<p> - $error</p><br>";
+		echo '<p>Please try again.</p>
+				</div>
+			</div>';
 	}
 }
 ?>
-<h1>Register</h1>
-<form action="register.php" method="post">
-	<p>Email Address: <input type="email" name="email" value="<?php if (isset($_POST['email'])) echo $_POST['email'];?>" /> </p>
-	<p>Password: <input type="password" name="pass1" pattern="[A-Za-z0-9!@#$%^&]{8,20}" /> Password must be 8-20 characters and can only contain A-Z, a-z, 0-9, and !@#$%^& .</p>
-	<p>Confirm Password: <input type="password" name="pass2" pattern="[A-Za-z0-9!@#$%^&]{8,20}" /></p>
-	<p><input type="submit" name="submit" value="Register" /></p>
+<div class="row">
+	<div class="col-sm-offset-3 col-sm-6">
+		<h1>Register</h1><br>
+	</div>
+</div>
+<form class="form-horizontal" action="register.php" method="post">
+	<div class="form-group">
+		<label class="control-label col-sm-3" for="email">E-Mail:</label>
+		<div class="col-sm-6">
+			<input type="email" class="form-control" name="email" placeholder="Enter your e-mail address" value="<?php if (isset($valid_email)) echo $valid_email;?>" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-3" for="pass1">Password:</label>
+		<div class="col-sm-6">
+			<input type="password" class="form-control" placeholder="Enter your password" name="pass1" pattern="[A-Za-z0-9!@#$%^&]{8,20}"/>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-sm-3" for="pass2">Confirm Password:</label>
+		<div class="col-sm-6">
+			<input type="password" class="form-control" placeholder="Confirm your password" name="pass2" pattern="[A-Za-z0-9!@#$%^&]{8,20}"/>
+		</div>
+	</div>
+	<div class="col-sm-offset-3 col-sm-6">
+		<p>Password must be 8-20 characters and can only contain A-Z, a-z, 0-9, and !@#$%^& .</p>
+	</div>
+	<div class="form-group">
+        <div class="col-sm-offset-3 col-sm-6">
+            <button type="submit" name="submit" class="btn btn-default">Register</button>
+        </div>
+	</div>
 </form>
+
 <?php include ('includes/footer.html'); ?>
