@@ -147,3 +147,12 @@ Passionate Game Studio
 SELECT game_studios.studio_name, games.game_name, games.game_price, games.game_desc, games.game_cover
 FROM game_studios
 INNER JOIN games ON game_studios.studio_id=games.studio_id;
+
+===
+
+game pages
+
+games directory with index.php that is linked to from game directories
+  index.php determines which directory was called and populates game page
+    eg: games/game1 is linked to games/gamepage where index.php will determine what link was called
+
