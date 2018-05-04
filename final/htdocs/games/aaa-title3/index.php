@@ -1,0 +1,2 @@
+<?php # games/index.php
+

@@ -156,3 +156,10 @@ games directory with index.php that is linked to from game directories
   index.php determines which directory was called and populates game page
     eg: games/game1 is linked to games/gamepage where index.php will determine what link was called
 
+===
+
+store page
+
+do a query for game names
+replace spaces with -, make lowercase
+  provides directories
