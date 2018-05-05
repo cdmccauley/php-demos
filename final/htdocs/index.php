@@ -8,8 +8,8 @@ session_start();
 function draw_card($class_value, $result_set, $game_index) {
   echo '<div class="' . $class_value . '">';
   echo '<div class="panel panel-default">';
-  echo '<div class="panel-heading">' . $result_set[$game_index][0] . '</div>';
-  echo '<div class="panel-body"><img src="https://placehold.it/500x250?text=' . $result_set[$game_index][2] . '" class="img-responsive" style="width:100%" alt="Image"></div>';
+  echo '<div class="panel-heading"><a style="color:black;font-weight:bold" href="games/' . $result_set[$game_index][2] . '/">' . $result_set[$game_index][0] . '</a></div>';
+  echo '<div class="panel-body"><img src="https://placehold.it/500x250?text=games/' . $result_set[$game_index][2] . '/cover.png" class="img-responsive" style="width:100%" alt="Image"></div>';
   echo '<div class="panel-footer text-right"><strong>$' . $result_set[$game_index][1] . '</strong></div>';
   echo '</div>';
   echo '</div>';
@@ -23,7 +23,7 @@ include ('includes/header.html');
 require('../mysqli_connect.php');
 
 // declare and run query
-$q = "SELECT games.game_name, games.game_price, games.game_cover FROM games;";
+$q = "SELECT games.game_name, games.game_price, games.game_dir FROM games;";
 $r = @$mysqli->query($q);
 
 // store query results

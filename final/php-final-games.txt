@@ -163,3 +163,11 @@ store page
 do a query for game names
 replace spaces with -, make lowercase
   provides directories
+
+===
+
+changing db column name and values
+
+ALTER TABLE games CHANGE game_cover game_dir VARCHAR(60) NOT NULL;
+
+UPDATE games SET game_dir = '' WHERE game_id = ;
