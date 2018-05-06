@@ -4,6 +4,7 @@
 session_name('GitGudGamesAuth');
 session_start();
 
+$page_title = 'Git Gud Games - Cart';
 include('includes/header.html');
 
 if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
