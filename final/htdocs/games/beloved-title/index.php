@@ -21,8 +21,25 @@ unset($mysqli);
 $page_title = $r[1];
 include('../../includes/header.html');
 
-// cart is stored in session variable
+// prepare cart
+if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+    $_SESSION['cart'] = array();
+}
+
+// cart validation declaration
+$in_cart = in_array(array($r[1], $r[2]), $_SESSION['cart']);
+
 // add logic to change the button from cart to dl once payment is complete and game has been added to user
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    // validate cart
+    if (!$in_cart) {
+        $_SESSION['cart'][] = array($r[1], $r[2]);
+        $in_cart = true;
+    }
+
+    // check login and send to login screen
+}
 
 ?>
 
@@ -39,7 +56,11 @@ include('../../includes/header.html');
                 <p>$<?php echo $r[2];?></p>
             </div>
         </div>
-        <div class="panel-footer text-right"><form><button type="button" class="btn">Add To Cart</button></form></div>
+        <div class="panel-footer text-right">
+            <form class="form-inline" action="index.php" method="post">
+                <button type="submit" class="btn btn-default" <?php echo $in_cart ? ' disabled>Game In Cart</button>' : '>Add To Cart</button>';?>
+            </form>
+        </div>
     </div>
 </div>
 

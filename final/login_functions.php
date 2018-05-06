@@ -13,7 +13,7 @@ function check_login($dbc, $email, $pass) {
 	if (mysqli_num_rows($r) == 1) {
 
 		// success, store session information
-		$_SESSION = mysqli_fetch_array($r, MYSQLI_ASSOC);
+		$_SESSION['email'] = current($r->fetch_assoc());
 		$_SESSION['agent'] = md5($_SERVER['HTTP_USER_AGENT']);
 
 		// indicate successful login
