@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // login was submitted
         // attempt login with provided credentials
         if (check_login($mysqli, $_POST['email'], $_POST['pass'])) {
 
-            // dispose of db connection
+            // dispose of db connection, move to function
 			$mysqli->close();
             unset($mysqli);
             

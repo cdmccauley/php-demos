@@ -29,6 +29,13 @@ if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
 // cart validation declaration
 $in_cart = in_array(array($r[1], $r[2], $r[4]), $_SESSION['cart']);
 
+// games validation declaration
+if (isset($_SESSION['games'])) {
+    $in_games = in_array($r[4], $_SESSION['games']);
+} else {
+    $in_games = false;
+}
+
 // add logic to change the button from cart to dl once payment is complete and game has been added to user
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -59,7 +66,14 @@ echo '
             <form class="form-inline" action="index.php" method="post">
                 <button type="submit" class="btn btn-default"';
 
-echo $in_cart ? ' disabled>Game In Cart</button>' : '>Add To Cart</button>';
+if ($in_cart) {
+    echo ' disabled>Game In Cart</button>';
+} elseif ($in_games) {
+    echo ' disabled>Game In MyGames</button>';
+} else {
+    echo '>Add To Cart</button>';
+}
+
 echo '                
             </form>
         </div>

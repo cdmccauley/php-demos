@@ -16,6 +16,16 @@ function check_login($dbc, $email, $pass) {
 		$_SESSION['email'] = current($r->fetch_assoc());
 		$_SESSION['agent'] = md5($_SERVER['HTTP_USER_AGENT']);
 
+		// store customers games
+		$q = "SELECT games.game_dir FROM games WHERE games.game_id IN (SELECT customer_games.game_id FROM customer_games WHERE customer_games.customer_id IN (SELECT customers.customer_id FROM customers WHERE customers.email='" . $_SESSION['email'] . "'));";
+		$r = mysqli_query($dbc, $q);
+		$_SESSION['games'] = array();
+		if (mysqli_num_rows($r) > 0) {
+			while ($row = $r->fetch_array()) {
+				$_SESSION['games'][] = $row[0];
+			}
+		}
+
 		// indicate successful login
 		return true;
 	} else {
