@@ -9,9 +9,15 @@ function draw_card($class_value, $result_set, $game_index) {
   echo '
     <div class="' . $class_value . '">
       <div class="panel panel-default">
-        <div class="panel-heading"><a style="color:black;font-weight:bold" href="games/' . $result_set[$game_index][2] . '/">' . $result_set[$game_index][0] . '</a></div>
-        <div class="panel-body"><img src="https://placehold.it/500x250?text=games/' . $result_set[$game_index][2] . '/cover.png" class="img-responsive" style="width:100%" alt="Image"></div>
-        <div class="panel-footer text-right"><strong>$' . $result_set[$game_index][1] . '</strong></div>
+        <div class="panel-heading">
+          <a style="color:black;font-weight:bold;display:block;" href="games/' . $result_set[$game_index][2] . '/">' . $result_set[$game_index][0] . '</a>
+        </div>
+        <div class="panel-body">
+          <a href="games/' . $result_set[$game_index][2] . '/"><img src="https://placehold.it/500x250?text=games/' . $result_set[$game_index][2] . '/cover.png" class="img-responsive" style="width:100%" alt="Image"></a>
+        </div>
+        <div class="panel-footer text-right">
+          <strong>$' . $result_set[$game_index][1] . '</strong>
+        </div>
       </div>
     </div>
   ';

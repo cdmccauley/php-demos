@@ -4,14 +4,26 @@
 session_name('GitGudGamesAuth');
 session_start();
 
+// get header
 $page_title = 'Git Gud Games - Cart';
 include('includes/header.html');
 
+// prep cart variable
 if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
     $_SESSION['cart'] = array();
 }
 
-// empty any games that a logged in user has in their games from their cart
+// empty any games that a logged in user has in mygames from their cart
+if (isset($_SESSION['games'])) {
+    foreach ($_SESSION['games'] as $myGame) {
+        for ($i = 0; $i < count($_SESSION['cart']); $i++) {
+            if (in_array($_SESSION['cart'][$i][2], $myGame)) {
+                unset($_SESSION['cart'][$i]);
+                $_SESSION['cart'] = array_values($_SESSION['cart']);
+            }
+        }
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -27,16 +39,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         require('../check_logged_out.php');
         check_logged_out();
 
-        // add game to users games
-        // store order with order_details
-        // update customer_games - works
+        // add game to customer_games
         require('../mysqli_connect.php');
 
         foreach($_SESSION['cart'] as $game) {
             $q = "INSERT INTO customer_games (customer_games.customer_id, customer_games.game_id) VALUES ((SELECT customers.customer_id FROM customers WHERE customers.email='" . $_SESSION['email'] . "'), (SELECT games.game_id FROM games WHERE games.game_dir='" . $game[2] . "'));";
             $mysqli->query($q);
-            $_SESSION['games'][] = $game[2];
+            $_SESSION['games'][] = array($game[2], $game[0]);
         }
+
+        // store order and order_details
 
         // clear cart
         unset($_SESSION['cart']);

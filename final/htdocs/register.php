@@ -94,14 +94,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // registration was submitted
 		}
 	} else {
 		// error present, display error
-		echo '<div class="row">
-				<div class="col-sm-offset-3 col-sm-6">
-					<h1>Error!</h1>
-					<p>The following error occurred:</p>';
-		echo "<p> - $error</p><br>";
-		echo '<p>Please try again.</p>
+		echo '
+			<div class="col-sm-offset-3 col-sm-6">
+				<div class="panel panel-danger">
+					<div class="panel-heading">
+						<h1>Error!</h1>
+					</div>
+					<div class="panel-body">
+						<p style="margin-bottom:0em;"> - ' . $error . '</p>
+					</div>
 				</div>
-			</div>';
+			</div>
+		';
 	}
 }
 ?>
