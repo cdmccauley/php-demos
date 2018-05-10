@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // download was submitted
     // confirm user owns the game
     foreach ($_SESSION['games'] as $game) {
         if (in_array($_POST['download'], $game)) {
-            // send the file
+            // confirmed to own, send the file
             header('Content-Description: File Transfer');
             header('Content-Type: text/plain');
             header('Content-Disposition: attachment; filename="' . $_POST['download'] . '.txt"');  
@@ -28,6 +28,15 @@ $page_title = 'Git Gud Games - My Games';
 include ('includes/header.html');
 
 // begin content
+echo '
+  <div class="row">
+    <div class="col-sm-4">
+        <h1>My Games</h1><br>
+    </div>
+  </div>
+';
+
+// draw game list
 if (count($_SESSION['games']) == 0) { // user does not own any games
     echo '
         <div class="panel panel-default">

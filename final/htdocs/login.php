@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // login was submitted
         // attempt login with provided credentials
         if (check_login($mysqli, $_POST['email'], $_POST['pass'])) {
 
-            // dispose of db connection, move to function
+            // dispose of db connection, move to function?
 			$mysqli->close();
             unset($mysqli);
             
@@ -79,8 +79,9 @@ if (isset($error) && !empty($error)) {
         </div>
     ';
 }
-
+// begin content
 ?>
+
 <div class="row">
     <div class="col-sm-offset-3 col-sm-6">
         <h1>Login</h1><br>

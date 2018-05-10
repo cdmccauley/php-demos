@@ -25,9 +25,9 @@ if (isset($_SESSION['games'])) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') { // checkout or remove submitted
 
-    // go to checkout
+    // checkout was submitted
     if (isset($_POST['checkout'])) {
         /* 
         $_POST['checkout'] now contains the total price for games in cart.
@@ -39,27 +39,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         require('../check_logged_out.php');
         check_logged_out();
 
-        // add game to customer_games
+        // query helper
         require('../mysqli_connect.php');
 
-        foreach($_SESSION['cart'] as $game) {
-            $q = "INSERT INTO customer_games (customer_games.customer_id, customer_games.game_id) VALUES ((SELECT customers.customer_id FROM customers WHERE customers.email='" . $_SESSION['email'] . "'), (SELECT games.game_id FROM games WHERE games.game_dir='" . $game[2] . "'));";
-            $mysqli->query($q);
-            $_SESSION['games'][] = array($game[2], $game[0]);
-        }
-
-        // store order and order_details
-
-        // clear cart
-        unset($_SESSION['cart']);
-
-        // redirect to mygames
-        require('../redirect_user.php');
-        redirect_user('mygames.php');
+        // assuming proper payment, set customer games
+        require('../set_customer_games.php');
+        set_customer_games($mysqli, $_SESSION['cart'], $_POST['checkout']);
 
     }
 
-    // remove game from cart
+    // removal from cart was submitted
     if (isset($_POST['remove'])) {
         for ($i = 0; $i < count($_SESSION['cart']); $i++) {
             if ($_POST['remove'] == $_SESSION['cart'][$i][2]) {
@@ -72,7 +61,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // begin content
 echo '
-<div class="well">
+    <div class="row">
+        <div class="col-sm-4">
+            <h1>Cart</h1><br>
+        </div>
+    </div>
+    <div class="well">
 ';
 
 // declaration

@@ -1,5 +1,7 @@
 <?php # attempt_registration.php
 
+// attempt to register a new user
+
 function attempt_registration($dbc, $email, $pass) {
     // declarations
     $e = $dbc->real_escape_string($email);

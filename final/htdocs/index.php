@@ -4,13 +4,13 @@
 session_name('GitGudGamesAuth');
 session_start();
 
-// helper function
+// helper function declaration
 function draw_card($class_value, $result_set, $game_index) {
   echo '
     <div class="' . $class_value . '">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <a style="color:black;font-weight:bold;display:block;" href="games/' . $result_set[$game_index][2] . '/">' . $result_set[$game_index][0] . '</a>
+          <a style="font-weight:bold;display:block;" href="games/' . $result_set[$game_index][2] . '/">' . $result_set[$game_index][0] . '</a>
         </div>
         <div class="panel-body">
           <a href="games/' . $result_set[$game_index][2] . '/"><img src="https://placehold.it/500x250?text=games/' . $result_set[$game_index][2] . '/cover.png" class="img-responsive" style="width:100%" alt="Image"></a>
@@ -25,12 +25,12 @@ function draw_card($class_value, $result_set, $game_index) {
 
 // get header
 $page_title = 'Git Gud Games';
-include ('includes/header.html');
+include('includes/header.html');
 
 // query helper
 require('../mysqli_connect.php');
 
-// declare and run query
+// declare and run query !!! MOVE TO FUNCTIONS !!! name: get_store_games()
 $q = "SELECT games.game_name, games.game_price, games.game_dir FROM games;";
 $r = @$mysqli->query($q);
 
@@ -49,6 +49,15 @@ $full_row_class = 'col-sm-4';
 $even_row_class = 'col-sm-offset-2 col-sm-4'; // second panel on even row will use $full_row_class
 $odd_row_class = 'col-sm-offset-4 col-sm-4';
 $game_counter = 0;
+
+// begin content
+echo '
+  <div class="row">
+    <div class="col-sm-4">
+        <h1>Store</h1><br>
+    </div>
+  </div>
+';
 
 // draw games rows
 if ($full_row > 0) { // draw full rows

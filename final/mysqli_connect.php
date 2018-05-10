@@ -1,4 +1,4 @@
-<?php # mysqli_oop_connect.php
+<?php # mysqli_connect.php
 
 // Set the database access information as constants:
 DEFINE ('DB_USER', 'root');

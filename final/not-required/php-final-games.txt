@@ -171,3 +171,85 @@ changing db column name and values
 ALTER TABLE games CHANGE game_cover game_dir VARCHAR(60) NOT NULL;
 
 UPDATE games SET game_dir = '' WHERE game_id = ;
+
+===
+
+*get customer_id
+INSERT INTO orders (orders.customer_id, orders.order_total)
+VALUES ('$customer_id', '$total')
+
+//returns customer_id from email
+(SELECT customers.customer_id FROM customers WHERE customers.email='chris@mccauley.tech')
+
+//returns game_id from game_dir
+(SELECT games.game_id FROM games WHERE games.game_dir=('aaa-title1'))
+
+INSERT INTO orders (orders.customer_id, orders.order_total, orders.order_date)
+VALUES ();
+
+//inserts customer_id and game_id into customer_games...
+INSERT INTO customer_games (customer_games.customer_id, customer_games.game_id) VALUES ((SELECT customers.customer_id FROM customers WHERE customers.email='chris@mccauley.tech'), (SELECT games.game_id FROM games WHERE games.game_dir='aaa-title1'));
+
+//get customer games dir names
+select * from customer_games inner join customers on customer_games.customer_id=customers.customer_id;
+select customer_games.game_id from customer_games where customer_games.customer_id=(select customers.customer_id from customers where customers.email='chris@mccauley.tech');
+
+SELECT games.game_dir FROM games;
+
+SELECT games.game_dir, customer_games.game_id FROM games RIGHT JOIN customer_games;
+
+SELECT games.game_dir FROM games WHERE games.game_id IN (SELECT customer_games.game_id FROM customer_games WHERE customer_games.customer_id IN (SELECT customers.customer_id FROM customers WHERE customers.email='chris@mccauley.tech'));
+
+SELECT games.game_dir, games.game_name FROM games WHERE games.game_id IN (SELECT customer_games.game_id FROM customer_games WHERE customer_games.customer_id IN (SELECT customers.customer_id FROM customers WHERE customers.email='chris@mccauley.tech'));
+===
+store
+register
+login
+logout
+mygames
+  download
+game-page
+cart
+
+indicate in mygames
+continue shopping
+header links
+
+===
+// declare and run query
+// !!! MOVE TO FUNCTIONS !!! name: get_game_page()
+
+$mysqli->real_escape_string($thisDirectory);
+$q = "SELECT game_studios.studio_name, games.game_name, games.game_price, games.game_desc, games.game_dir FROM game_studios INNER JOIN games ON game_studios.studio_id=games.studio_id WHERE games.game_dir='$thisDirectory';";
+$r = $mysqli->query($q);
+$r = $r->fetch_assoc();
+===
+// !!! MOVE TO FUNCTIONS !!! name: set_customer_games()
+        foreach($_SESSION['cart'] as $game) {
+            $q = "INSERT INTO customer_games (customer_games.customer_id, customer_games.game_id) VALUES ((SELECT customers.customer_id FROM customers WHERE customers.email='" . $_SESSION['email'] . "'), (SELECT games.game_id FROM games WHERE games.game_dir='" . $game[2] . "'));";
+            $mysqli->query($q);
+            $_SESSION['games'][] = array($game[2], $game[0]);
+        }
+
+        // store order and order_details !!!
+
+        // finished with cart
+        unset($_SESSION['cart']);
+
+        // redirect to mygames
+        require('../redirect_user.php');
+        redirect_user('mygames.php');
+===
+customer_id, order_total
+order_id, game_id
+
+INSERT INTO orders (orders.customer_id, orders.order_total) VALUES ((SELECT customers.customer_id FROM customers WHERE customers.email='" . $_SESSION['email'] . "'), $orderTotal);
+
+INSERT INTO orders (orders.customer_id, orders.order_total) VALUES ((SELECT customers.customer_id FROM customers WHERE customers.email='chris@mccauley.tech'), 209.95);
+
+get order id from query that looks up id of last order from that customer
+SELECT orders.order_id FROM orders WHERE orders.customer_id=(SELECT customers.customer_id FROM customers WHERE customers.email='" . $_SESSION['email'] . "') ORDER BY orders.order_date DESC LIMIT 1;
+
+INSERT INTO order_details (order_details.order_id, order_details.game_id) VALUES ((), ());
+
+INSERT INTO order_details (order_details.order_id, order_details.game_id) VALUES ((SELECT orders.order_id FROM orders WHERE orders.customer_id=(SELECT customers.customer_id FROM customers WHERE customers.email='" . $_SESSION['email'] . "') ORDER BY orders.order_date DESC LIMIT 1;), ());

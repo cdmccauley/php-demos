@@ -74,9 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // registration was submitted
 		if (attempt_registration($mysqli, $valid_email, $valid_pass)) {
 
 			// indicate registration success
-			echo '<h1>Thank you!</h1>';
-			echo '<p>You are now registered.</p>';
-			echo '<a href="login.php">Go to the login page.</a>';
+			echo '
+				<h1>Thank you!</h1>
+				<p>You are now registered.</p>
+				<a href="login.php">Go to the login page.</a>
+			';
 
 			// registration success, dispose of db connection
 			$mysqli->close();
@@ -84,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // registration was submitted
 
 			// stop script
 			exit();
+
 		} else {
 			// indicate registration failure
 			$error = 'Unexpected system error, we apologize for any inconvenience.';
@@ -109,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // registration was submitted
 	}
 }
 ?>
+
 <div class="row">
 	<div class="col-sm-offset-3 col-sm-6">
 		<h1>Register</h1><br>
@@ -143,4 +147,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // registration was submitted
 	</div>
 </form>
 
-<?php include ('includes/footer.html'); ?>
+<?php 
+
+// get footer
+include('includes/footer.html');
+
+?>

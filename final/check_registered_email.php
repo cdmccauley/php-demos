@@ -1,5 +1,7 @@
 <?php # check_registered_email.php
 
+// check if an email address is already registered
+
 function check_registered_email($dbc, $email) {
     // declarations
     $e = $dbc->real_escape_string($email);

@@ -1,5 +1,7 @@
 <?php # check_login.php
 
+// attempt to log a user in
+
 function check_login($dbc, $email, $pass) {
 	// declarations
 	$e = mysqli_real_escape_string($dbc, $email);
