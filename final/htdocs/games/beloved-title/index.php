@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // game was added to cart
     }
 
     // redirect to cart
-    header("Location: http://" . $_SERVER['HTTP_HOST'] . "/php-scripts/final/htdocs/cart.php");
+    header("Location: http://" . $_SERVER['HTTP_HOST'] . "/cart.php");
 }
 
 // begin content

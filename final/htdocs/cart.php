@@ -96,7 +96,7 @@ echo '
         </div>
         <div class="panel-body">
             <form class="form-inline" action="cart.php" method="post">
-                <button type="submit" class="btn pull-right" name="checkout" value="' . $total;
+                <button style="margin-left:1em;margin-bottom:1em" type="submit" class="btn pull-right" name="checkout" value="' . $total;
 
 // disable checkout if cart is empty
 echo empty($_SESSION['cart']) ? '" disabled>' : '">';
@@ -105,6 +105,7 @@ echo empty($_SESSION['cart']) ? '" disabled>' : '">';
 echo '
                 Purchase</button>
             </form>
+            <a href="index.php" class="btn btn-xs btn-default pull-right" role="button">Continue Shopping</a>
         </div>
     </div>
 </div>';

@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // download was submitted
 
 // get header
 $page_title = 'Git Gud Games - My Games';
-include ('includes/header.html');
+include('includes/header.html');
 
 // begin content
 echo '
@@ -52,18 +52,19 @@ if (count($_SESSION['games']) == 0) { // user does not own any games
         echo '
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <img src="https://placehold.it/140x80?text=/games/' . $game[0] . '/cover.png" class="img-responsive pull-left" style="padding-right:1em;" alt="Image">
-                    <p style="margin-bottom:0.25em;">' . $game[1] . '</p>
+                    <a href="/games/' . $game[0] . '"><img src="https://placehold.it/140x80?text=/games/' . $game[0] . '/cover.png" class="img-responsive pull-left" style="padding-right:1em;" alt="Image">
+                    <p style="margin-bottom:0.25em;display:inline;">' . $game[1] . '</p></a>
                     <form class="form-inline" action="mygames.php" method="post">
-                        <button type="submit" class="btn btn-success pull-right" name="download" value="' . $game[0] . '">Download</button>
+                        <button type="submit" class="btn btn-default pull-right" name="download" value="' . $game[0] . '">Download</button>
                     </form>
                 </div>
-            </div>';
+            </div>
+        ';
     }
 }
 
 
 // get footer
-include ('includes/footer.html');
+include('includes/footer.html');
 
 ?>

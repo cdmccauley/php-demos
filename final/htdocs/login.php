@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // login was submitted
     $error;
 
     // trim whitespace
-    $_POST['email'] = trim($_POST['email']);
+    $_POST['email'] = strtolower(trim($_POST['email']));
     $_POST['pass'] = trim($_POST['pass']);
 
     // login variable validation
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // login was submitted
         // attempt login with provided credentials
         if (check_login($mysqli, $_POST['email'], $_POST['pass'])) {
 
-            // dispose of db connection, move to function?
+            // dispose of db connection
 			$mysqli->close();
             unset($mysqli);
             
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // login was submitted
 }
 
 $page_title = 'Git Gud Games - Login';
-include ('includes/header.html');
+include('includes/header.html');
 
 if (isset($error) && !empty($error)) {
     // error present, display error
@@ -103,8 +103,9 @@ if (isset($error) && !empty($error)) {
     <div class="form-group">
         <div class="col-sm-offset-3 col-sm-6">
             <button type="submit" name="submit" class="btn btn-default">Submit</button>
+            <p class="pull-right">Need to register? <a href="register.php">Click here to visit registration.</a></p>
         </div>
     </div>
 </form>
 
-<?php include ('includes/footer.html'); ?>
+<?php include('includes/footer.html'); ?>

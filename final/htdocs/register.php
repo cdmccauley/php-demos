@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { // registration was submitted
     } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
         $error = 'Provided e-mail address format not recognized.';
     } else {
-		$valid_email = $_POST['email'];
+		$valid_email = strtolower($_POST['email']);
 		$_POST['email'] = '';
 	}
 

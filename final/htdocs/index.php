@@ -30,15 +30,12 @@ include('includes/header.html');
 // query helper
 require('../mysqli_connect.php');
 
-// declare and run query !!! MOVE TO FUNCTIONS !!! name: get_store_games()
-$q = "SELECT games.game_name, games.game_price, games.game_dir FROM games;";
-$r = @$mysqli->query($q);
+// declaration
+$storeValues = array();
 
-// store query results
-$game_total = $r->num_rows;
-$full_row = (int)($game_total / 3); // 0, 0, or 1+
-$partial_row = $game_total % 3; // 1, 2, or 0
-$games = $r->fetch_all();
+// get store games
+require('../get_store_games.php');
+$storeValues = get_store_games($mysqli);
 
 // finished with query
 $mysqli->close();
@@ -54,34 +51,34 @@ $game_counter = 0;
 echo '
   <div class="row">
     <div class="col-sm-4">
-        <h1>Store</h1><br>
+      <h1>Store</h1><br>
     </div>
   </div>
 ';
 
 // draw games rows
-if ($full_row > 0) { // draw full rows
-  for ($i = $full_row; $i > 0; $i--) {
+if ($storeValues['numFullRows'] > 0) { // draw full rows
+  for ($i = $storeValues['numFullRows']; $i > 0; $i--) {
     echo '<div class="row">';
     for ($j = 0; $j < 3; $j++) {
-      draw_card($full_row_class, $games, $game_counter);
+      draw_card($full_row_class, $storeValues['games'], $game_counter);
       $game_counter++;
     }
     echo '</div><br>';
   }
 }
 
-if ($partial_row > 0) { // draw partial row
-  if ($partial_row % 2 == 0) { // draw row of 2
+if ($storeValues['numPartialRows'] > 0) { // draw partial row
+  if ($storeValues['numPartialRows'] % 2 == 0) { // draw row of 2
     echo '<div class="row">';
-    draw_card($even_row_class, $games, $game_counter);
+    draw_card($even_row_class, $storeValues['games'], $game_counter);
     $game_counter++;
-    draw_card($full_row_class, $games, $game_counter);
+    draw_card($full_row_class, $storeValues['games'], $game_counter);
     $game_counter++;
     echo '</div><br>';
   } else { // draw row of 1
     echo '<div class="row">';
-    draw_card($odd_row_class, $games, $game_counter);
+    draw_card($odd_row_class, $storeValues['games'], $game_counter);
     $game_counter++;
     echo '</div><br>';
   }
